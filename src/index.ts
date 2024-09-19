@@ -1,3 +1,5 @@
-const nombre: string = 'Tomas';
+import dotnev from 'dotenv';
+import Server from "./models/server";
 
-console.log(nombre)
+dotnev.config();
+const server = new Server();
