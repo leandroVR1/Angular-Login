@@ -1,9 +1,14 @@
 import express, {Application} from 'express';
 import routesProduct from '../routes/product';
 import routesUser from '../routes/user';
+import {Product} from './product';
+import { User } from './user';
+
+
+
  class Server {
     private app: Application;
-    public port: string;
+    private port: string;
 
     constructor(){
         this.app = express();
@@ -11,6 +16,7 @@ import routesUser from '../routes/user';
         this.listen();
         this.midlewares();
         this.routes();
+        this.dbConnect();
        
     }
 
@@ -27,6 +33,17 @@ import routesUser from '../routes/user';
 
     midlewares(){
         this.app.use(express.json());
+        
+    }
+
+    async dbConnect(){
+        try{
+            await Product.sync();
+            await User.sync();
+        }
+        catch(error){
+            console.log('Error al iniciar la base de datos', error);
+        }
     }
 }
 
