@@ -1,8 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const sequalieze = new sequelize_1.Sequelize('angular', 'root', 'admin123', {
+const sequelize = new sequelize_1.Sequelize('angular', 'root', 'admin123', {
     host: 'localhost',
-    dialect: 'mysql'
+    dialect: 'mysql',
+    port: 3306,
+    logging: console.log, // Esto mostrará las consultas SQL en la consola
+    dialectOptions: {
+        connectTimeout: 60000
+    }
 });
-exports.default = sequalieze;
+// Prueba la conexión
+sequelize.authenticate()
+    .then(() => {
+    console.log('Conexión establecida correctamente.');
+})
+    .catch(err => {
+    console.error('No se pudo conectar a la base de datos:', err);
+});
+exports.default = sequelize;

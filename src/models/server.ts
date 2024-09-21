@@ -1,4 +1,5 @@
 import express, {Application} from 'express';
+import cors from 'cors';
 import routesProduct from '../routes/product';
 import routesUser from '../routes/user';
 import {Product} from './product';
@@ -32,7 +33,12 @@ import { User } from './user';
     }
 
     midlewares(){
+        // Parseo body
         this.app.use(express.json());
+
+        //Cors
+        this.app.use(cors());
+
         
     }
 
