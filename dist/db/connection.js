@@ -5,7 +5,7 @@ const sequelize = new sequelize_1.Sequelize('angular', 'root', 'admin123', {
     host: 'localhost',
     dialect: 'mysql',
     port: 3306,
-    logging: console.log, // Esto mostrará las consultas SQL en la consola
+    logging: console.log,
     dialectOptions: {
         connectTimeout: 60000
     }
