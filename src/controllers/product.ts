@@ -11,6 +11,24 @@ export const getProducts = async (req: Request, res: Response) => {
     }
 };
 
+export const createProduct = async (req: Request, res: Response) => {
+    const { name, description } = req.body;
+
+    try {
+        const newProduct = await Product.create({ name, description });
+        res.json({
+            msg: 'Producto creado exitosamente!',
+            product: newProduct
+        });
+    } catch (error) {
+        res.status(400).json({
+            msg: 'Ha ocurrido un error:',
+            error
+        });
+    }
+
+}
+
 
     /*res.json({
         msg: 'Get Products',
