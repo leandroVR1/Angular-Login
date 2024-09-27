@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProducts = void 0;
+exports.createProduct = exports.getProducts = void 0;
 const product_1 = require("../models/product");
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -21,6 +21,23 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getProducts = getProducts;
+const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, description } = req.body;
+    try {
+        const newProduct = yield product_1.Product.create({ name, description });
+        res.json({
+            msg: 'Producto creado exitosamente!',
+            product: newProduct
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            msg: 'Ha ocurrido un error:',
+            error
+        });
+    }
+});
+exports.createProduct = createProduct;
 /*res.json({
     msg: 'Get Products',
 })*/

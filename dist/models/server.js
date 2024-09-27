@@ -18,18 +18,20 @@ const product_1 = __importDefault(require("../routes/product"));
 const user_1 = __importDefault(require("../routes/user"));
 const product_2 = require("./product");
 const user_2 = require("./user");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config(); // Asegúrate de cargar las variables de entorno
 class Server {
     constructor() {
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '3001';
-        this.listen();
         this.midlewares();
         this.routes();
         this.dbConnect();
+        this.listen();
     }
     listen() {
         this.app.listen(this.port, () => {
-            console.log('Aplicacion corriendo en el puerto ' + this.port);
+            console.log('Aplicación corriendo en el puerto ' + this.port);
         });
     }
     routes() {
@@ -37,9 +39,7 @@ class Server {
         this.app.use('/api/users', user_1.default);
     }
     midlewares() {
-        // Parseo body
         this.app.use(express_1.default.json());
-        //Cors
         this.app.use((0, cors_1.default)());
     }
     dbConnect() {
@@ -47,9 +47,11 @@ class Server {
             try {
                 yield product_2.Product.sync();
                 yield user_2.User.sync();
+                console.log('Base de datos sincronizada correctamente');
             }
             catch (error) {
-                console.log('Error al iniciar la base de datos', error);
+                console.error('Error al sincronizar la base de datos:', error);
+                process.exit(1); // Termina el proceso si no se puede sincronizar la base de datos
             }
         });
     }
