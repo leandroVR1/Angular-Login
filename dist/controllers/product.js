@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createProduct = exports.getProducts = void 0;
+exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProductById = exports.getProducts = void 0;
 const product_1 = require("../models/product");
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -21,6 +21,20 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getProducts = getProducts;
+const getProductById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const product = yield product_1.Product.findByPk(id);
+        if (!product) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        res.json(product);
+    }
+    catch (error) {
+        res.status(500).json({ message: 'Error al obtener el producto', error });
+    }
+});
+exports.getProductById = getProductById;
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, description } = req.body;
     try {
@@ -38,6 +52,44 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.createProduct = createProduct;
-/*res.json({
-    msg: 'Get Products',
-})*/
+const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { name, description } = req.body;
+    try {
+        const updatedProduct = yield product_1.Product.update({ name, description }, { where: { id } });
+        if (updatedProduct[0] === 0) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        res.json({
+            msg: 'Producto actualizado exitosamente!',
+            product: updatedProduct[0]
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            msg: 'Ha ocurrido un error:',
+            error
+        });
+    }
+});
+exports.updateProduct = updateProduct;
+const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const deletedProduct = yield product_1.Product.destroy({ where: { id } });
+        if (deletedProduct === 0) {
+            return res.status(404).json({ message: 'Producto no encontrado' });
+        }
+        res.json({
+            msg: 'Producto eliminado exitosamente!',
+            deletedProduct
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            msg: 'Ha ocurrido un error:',
+            error
+        });
+    }
+});
+exports.deleteProduct = deleteProduct;
